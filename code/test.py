@@ -24,9 +24,14 @@ def readcsv(f, cid_row, text_row, master_row, coname_row):
 			print n
 	return d
 
+
+print 'importing data from the pres file...'
+
 f = open('../full_dataset_matched_modifiedtabPRES.txt')
 
 presd = readcsv(f, 3, 5, 8, 2)
+
+print 'importing data from QA File...'
 
 f = open('../full_dataset_matched_modifiedtabQA.txt')
 

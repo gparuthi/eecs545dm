@@ -5,6 +5,7 @@ from financial_tone import analyst_tone,POSITIVE,NEGATIVE
 from IPython import parallel
 import test
 
+# merge dictionary with gathered data
 def load_dic(presd, merged):
 	for cid in presd:
 	    if cid not in merged:
@@ -15,6 +16,7 @@ def load_dic(presd, merged):
 			else:
 				merged[cid][mas] = presd[cid][mas]
 
+# single core sentiment naive sentiment analysis
 def start(merged):
 	c = 0
 	res = {}
@@ -30,7 +32,6 @@ def start(merged):
 	        manager_text += merged[cid]['CEO-Chair']
 	    if 'Finance' in merged[cid]:
 	        manager_text += merged[cid]['Finance']
-	        
 	    if 'Operator' in merged[cid]:
 	        manager_text += merged[cid]['Operator']
 
@@ -42,12 +43,6 @@ def start(merged):
 	    if c%100 == 0:
 			print '[%s] %d / %d' % (str(datetime.now()), c,len(merged))
 	return res
-
-rc= parallel.Client()
-
-lview = rc.load_balanced_view() 
-
-lview.block = True
 
 
 def getSent(item):
@@ -91,7 +86,34 @@ def get_merged(presd,qad):
 
 	return merged
 
+def start():
+    print datetime.now()
+    parallel_result = dview.map_async(getSent, items)
+    parallel_result.wait_interactive()
+    print datetime.now()
+    return parallel_result
+
+def write_to_file():
+	output_filep = 'output.csv'
+	with open(output_filep, "wb") as f:
+	    fileWriter = csv.writer(f, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
+	    for k in pr.result:
+	        row = k.keys()
+	        # ipdb.set_trace()
+	        row.append(k[k.keys()[0]]['a_tone'])
+	        row.append(k[k.keys()[0]]['m_tone'])
+
+	        fileWriter.writerow(row)
+# code for init a parallel sentiment analysis
+# parallel core sentiment analysis 
+rc= parallel.Client()
+lview = rc.load_balanced_view() 
+lview.block = True
+dview = rc[:]
+
 merged = get_merged(test.presd, test.qad)
 items = merged.items()
+
+
 
 # res = processFile.map([])
