@@ -86,18 +86,19 @@ def get_merged(presd,qad):
 
 	return merged
 
-def start():
+def StartParallelProcess():
     print datetime.now()
     parallel_result = dview.map_async(getSent, items)
     parallel_result.wait_interactive()
     print datetime.now()
     return parallel_result
 
-def write_to_file():
-	output_filep = 'output.csv'
+# dict is {cid:{'a_tone':'','m_tone':''}}
+def write_to_file(dict, output_filep):
+	# output_filep = 'output.csv'
 	with open(output_filep, "wb") as f:
 	    fileWriter = csv.writer(f, delimiter=',',quotechar='|', quoting=csv.QUOTE_MINIMAL)
-	    for k in pr.result:
+	    for k in dict:
 	        row = k.keys()
 	        # ipdb.set_trace()
 	        row.append(k[k.keys()[0]]['a_tone'])
