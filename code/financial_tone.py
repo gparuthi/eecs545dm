@@ -1,5 +1,12 @@
 #!/usr/bin/python
 
+# ADD THIS: Load The Positive and Negative Financial Word List
+POSITIVE = open('positive.txt','r').readlines()
+POSITIVE = [w.strip().lower() for w in POSITIVE]
+
+NEGATIVE = open('negative.txt','r').readlines()
+NEGATIVE = [w.strip().lower() for w in NEGATIVE]
+
 def analyst_tone(positive_tokens, negative_tokens, text):
 	'''Calculate Analyst Tone Based on Negative/Positive financial terms'''
 	
