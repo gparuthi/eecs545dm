@@ -1,5 +1,6 @@
+#!/usr/bin/python
 import csv
-import ipdb
+import json
 
 def readcsvpres(f):
 	d = {}
@@ -46,10 +47,16 @@ def readcsvqa(f):
 
 
 
-f = open('../full_dataset_matched_modifiedtabPRES.txt')
+f = open('/Users/rad/Developer/Machine Learning/full_dataset_matched_modifiedtabPRES.txt')
 
 presd = readcsvpres(f)
 
-f = open('../full_dataset_matched_modifiedtabQA.txt')
+f = open('/Users/rad/Developer/Machine Learning/full_dataset_matched_modifiedtabQA.txt')
 
 qad = readcsvqa(f)
+
+# Save these variables to a file
+f1 = open('presd.json','w')
+f2 = open('qad.json', 'w')
+f1.write(json.dumps(presd))
+f2.write(json.dumps(qad))
